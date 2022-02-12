@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>My project</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- CSS
+================================================== -->
+<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="static/css/bootstrap.css">
+<link rel="stylesheet" href="static/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="static/css/prettyPhoto.css" />
+<link rel="stylesheet" href="static//flexslider.css" />
+<link rel="stylesheet" href="static/css/custom-styles.css">
+
+
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <link rel="stylesheet" href="css/style-ie.css"/>
+<![endif]--> 
+
+<!-- Favicons
+================================================== -->
+<link rel="shortcut icon" href="static/img/favicon.ico">
+<link rel="apple-touch-icon" href="static/img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="static/img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="static/img/apple-touch-icon-114x114.png">
+
+<!-- JS
+================================================== -->
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="static/js/bootstrap.js"></script>
+<script src="static/js/jquery.prettyPhoto.js"></script>
+<script src="static/js/jquery.flexslider.js"></script>
+<script src="static/js/jquery.custom.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+
+    $("#btn-blog-next").click(function () {
+      $('#blogCarousel').carousel('next')
+    });
+     $("#btn-blog-prev").click(function () {
+      $('#blogCarousel').carousel('prev')
+    });
+
+     $("#btn-client-next").click(function () {
+      $('#clientCarousel').carousel('next')
+    });
+     $("#btn-client-prev").click(function () {
+      $('#clientCarousel').carousel('prev')
+    });
+    
+});
+
+ $(window).load(function(){
+
+    $('.flexslider').flexslider({
+        animation: "slide",
+        slideshow: true,
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+    });  
+});
+
+</script>
+
+</head>
+
+<body class="home">
+    <!-- Color Bars (above header)-->
+	<div class="color-bar-1"></div>
+    <div class="color-bar-2 color-bg"></div>
+    
+    <div class="container">
+    
+      <div class="row header"><!-- Begin Header -->
+      
+        <!-- Logo
+        ================================================== -->
+        <div class="span5 logo">
+            <h3>Hotel Project Welcome : {{ session['username'] }}</h3>
+        </div>
+        
+        <!-- Main Navigation
+        ================================================== -->
+        <div class="span7 navigation">
+            <div class="navbar hidden-phone">
+            
+            <ul class="nav">
+            <li><a href="/homepage">Home</a></li>
+            <li class="dropdown active">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="index.htm">ROOMS <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/floor1">FLOOR 1</a></li>
+                    <li><a href="/floor2">FLOOR 2</a></li>
+                    <li><a href="/floor3">FLOOR 3</a></li>
+                </ul>
+            </li>
+           <li><a href="/myroom">MY Room</a></li>
+           {% if session['userstatus'] > 1 %}
+             <li><a href="/admin">Admin</a></li>
+            {% endif %}
+             <li><a href="/homepage">Contact</a></li>
+             <li><a href="/logout">Logout</a></li>
+            </ul>
+            </div>
+        </div>  
+      </div><!-- End Header -->
+     
+    <div class="row headline"><!-- Begin Headline -->
+    
+     	<!-- Slider Carousel
+        ================================================== -->
+        <div class="span8">
+            <div class="flexslider">
+              <ul class="slides">
+                <li><a href=""><img src="static/img_rooms/bg_main.jpg" alt="slider" style="height: 400px; width: 900px;" /></a></li>
+              </ul>
+            </div>
+        </div>
+        
+        <!-- Headline Text
+        ================================================== -->
+        <div class="span4">
+        	<h3>Welcome to Piccolo. <br />
+            A Big Theme in a Small Package.</h3>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium vulputate magna sit amet blandit.</p>
+            <p>Cras rutrum, massa non blandit convallis, est lacus gravida enim, eu fermentum ligula orci et tortor. In sit amet nisl ac leo pulvinar molestie. Morbi blandit ultricies ultrices.</p>
+        </div>
+    </div><!-- End Headline -->
+    
+    <div class="row gallery-row"><!-- Begin Gallery Row --> 
+      
+    	<div class="span12">
+            <h5 class="title-bg">ALL ROOMS
+                <small>IN HOTEL</small>
+            </h5>
+    	
+        <!-- Gallery Thumbnails
+        ================================================== -->
+
+            <div class="row clearfix no-margin">
+            <ul class="gallery-post-grid holder">
+                 {% for room in rooms %}
+                    <!-- Gallery Item 1 -->
+                    <form action="{{url_for('homepage.showroom')}}" method="POST">
+                        <li  class="span3 gallery-item" data-id="id-1" data-type="illustration">
+                            <span class="gallery-hover-4col hidden-phone hidden-tablet">
+                                <span class="gallery-icons">
+                                    <a href="{{room.3}}" class="item-zoom-link lightbox" title="Custom Illustration" data-rel="prettyPhoto"></a>
+                                    
+                                </span>
+                            </span>
+                                <img src="{{room.3}}" alt="Gallery"></a>
+                                <style>
+                                    img {
+                                        width: 270px;
+                                        height: 190px;
+                                        object-fit: fill;
+                                         }
+                                    </style>
+                              <input type="hidden" value="{{room.0}}" name="id">
+                            <span class="project-details""><a>Room Number: {{room.0}}</a><a>Floor: {{room.2}}</a>
+                                {% if room.1 == 0 %}
+                                <a style="color: green;">Status: Available</a> </span>
+                                {% else %}
+                                <a style="color: red;">Status: Have Owner</a> </span>
+                                {% endif %}
+                                <button type="submit" class="btn btn-large btn-warning">View Room</button>
+                        </li>
+                    </form>
+                    {% endfor %}
+                </ul>
+                </div>
+            </div>
+ 
+    </div><!-- End Gallery Row -->          
+            </div>
+            </div> 	
+        </div>
+        
+        <!-- Client Area
+        ================================================== -->
+        
+
+    <!-- Footer Area
+        ================================================== -->
+
+	<div class="footer-container"><!-- Begin Footer -->
+    	<div class="container">
+        	<div class="row footer-row">
+                <div class="span3 footer-col">
+                    <h5>About Us</h5>
+                   
+                    <address>
+                        <strong>Design Team</strong><br />
+                        123 Main St, Suite 500<br />
+                        New York, NY 12345<br />
+                    </address>
+                    <ul class="social-icons">
+                        <li><a href="#" class="social-icon facebook"></a></li>
+                        <li><a href="#" class="social-icon twitter"></a></li>
+                        <li><a href="#" class="social-icon dribble"></a></li>
+                        <li><a href="#" class="social-icon rss"></a></li>
+                        <li><a href="#" class="social-icon forrst"></a></li>
+                    </ul>
+                </div>
+                <div class="span3 footer-col">
+                    <h5>Latest Tweets</h5>
+                    <ul>
+                        <li><a href="#">@room122</a> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                        <li><a href="#">@room122</a> In interdum felis fermentum ipsum molestie sed porttitor ligula rutrum. Morbi blandit ultricies ultrices.</li>
+                        <li><a href="#">@room122</a> Vivamus nec lectus sed orci molestie molestie. Etiam mattis neque eu orci rutrum aliquam.</li>
+                    </ul>
+                </div>
+                <div class="span3 footer-col">
+                    <h5>Latest Posts</h5>
+                     <ul class="post-list">
+                        <li><a href="#">Lorem ipsum dolor sit amet</a></li>
+                        <li><a href="#">Consectetur adipiscing elit est lacus gravida</a></li>
+                        <li><a href="#">Lectus sed orci molestie molestie etiam</a></li>
+                        <li><a href="#">Mattis consectetur adipiscing elit est lacus</a></li>
+                        <li><a href="#">Cras rutrum, massa non blandit convallis est</a></li>
+                    </ul>
+                </div> -->
+
+            <div class="row"><!-- Begin Sub Footer -->
+                <div class="span12 footer-col footer-sub">
+                    <div class="row no-margin">
+                        <div class="span6"><span class="left">Copyright 2012 Piccolo Theme. All rights reserved.</span></div>
+                        <div class="span6">
+                            <span class="right">
+                            <a href="#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Gallery</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Blog</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Contact</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Sub Footer -->
+
+        </div>
+    </div><!-- End Footer --> 
+    
+    <!-- Scroll to Top -->  
+    <div id="toTop" class="hidden-phone hidden-tablet">Back to Top</div>
+    
+</body>
+</html>
